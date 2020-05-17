@@ -10,13 +10,44 @@ function laodNames(e) {
     const amount = document.getElementById('quantity').value;
 
     // Build the URL
-    let url = 'http://uinames.com/api/?';
+    let url = '/uinames-master/uinames.com/api/names?';
     // REad the origin mnd append to the URL
     if(origin !==''){
         url += `region=${origin}&`;
     }
 
-    console.log(url);
+    if(genre !==''){
+        url += `genre=${genre}&`;
+    }
+    
+    if(amount !==''){
+        url += `amount=${amount}&`;
+    }
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', url, true );
+
+    xhr.onload = function() {
+        if(this.status === 200) {
+            const names = JSON.parse(this.responseText);
+
+            let html = '<h2>Generated Names</h2>';
+            html += '<ul class = "list">';
+            names.forEach(function(name) {
+                html += `
+                    <li>${name.name}</li>
+                `;
+            });
+
+
+            html += '</ul>';
+            document.querySelector('#result').innerHTML = html;
+
+        }
+    }
+
+    xhr.send();
 
 }
 
